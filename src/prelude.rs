@@ -20,6 +20,7 @@ pub use distribution::Beta;
 pub use distribution::Binomial;
 pub use distribution::Categorical;
 pub use distribution::Chisquared;
+pub use distribution::Erlang;
 pub use distribution::Exponential;
 pub use distribution::Gamma;
 pub use distribution::Gaussian;
