@@ -1,28 +1,28 @@
 use distribution;
 use source::Source;
 
-/// A erlang distribution.
+/// An erlang distribution.
 // We use the fact that the Erlang distribution is a special form of the
 // gamma distribution.
 #[derive(Clone, Copy)]
 pub struct Erlang(distribution::Gamma);
 
 impl Erlang {
-    /// Create a erlang distribution with shape parametr `k` and rate parameter
-    /// 'l'.
+    /// Create an erlang distribution with shape parametr `k` and rate parameter
+    /// `l`.
     ///
-    /// It should hold that `k > 0` and `l > 0`..
+    /// It should hold that `k > 0` and `l > 0`.
     #[inline]
     pub fn new(k: u64, l: f64) -> Self {
         should!(k > 0 && l > 0.0);
         Erlang(distribution::Gamma::new((k as f64), 1.0 / l))
     }
 
-    /// Return the degrees of freedom parameter 'k'.
+    /// Return the degrees of freedom parameter `k`.
     #[inline(always)]
     pub fn k(&self) -> u64 { self.0.k() as u64 }
 
-    /// Return the rate parameter 'l'.
+    /// Return the rate parameter `l`.
     #[inline(always)]
     pub fn l(&self) -> f64 { 1.0 / self.0.theta() }
 }
