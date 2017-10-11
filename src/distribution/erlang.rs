@@ -21,6 +21,10 @@ impl Erlang {
     /// Return the degrees of freedom parameter 'k'.
     #[inline(always)]
     pub fn k(&self) -> u64 { self.0.k() as u64 }
+
+    /// Return the rate parameter 'l'.
+    #[inline(always)]
+    pub fn l(&self) -> f64 { 1.0 / self.0.theta() }
 }
 
 impl distribution::Continuous for Erlang {
