@@ -2,12 +2,10 @@ use distribution;
 use source::Source;
 
 /// A erlang distribution.
+// We use the fact that the Erlang distribution is a special form of the
+// gamma distribution.
 #[derive(Clone, Copy)]
-pub struct Erlang {
-    // We use the fact that the Erlang distribution is a special form of the
-    // gamma distribution.
-    gamma: distribution::Gamma,
-}
+pub struct Erlang(distribution::Gamma);
 
 impl Erlang {
     /// Create a erlang distribution with shape parametr `k` and rate parameter
@@ -17,17 +15,17 @@ impl Erlang {
     #[inline]
     pub fn new(k: u64, l: f64) -> Self {
         should!(k > 0 && l > 0.0);
-        Erlang { gamma: distribution::Gamma::new((k as f64), 1.0 / l) }
+        Erlang(distribution::Gamma::new((k as f64), 1.0 / l))
     }
 
     /// Return the degrees of freedom parameter 'k'.
     #[inline(always)]
-    pub fn k(&self) -> u64 { self.gamma.k() as u64 }
+    pub fn k(&self) -> u64 { self.0.k() as u64 }
 }
 
 impl distribution::Continuous for Erlang {
     fn density(&self, x: f64) -> f64 {
-        self.gamma.density(x)
+        self.0.density(x)
     }
 }
 
@@ -35,54 +33,54 @@ impl distribution::Distribution for Erlang {
     type Value = <distribution::Gamma as distribution::Distribution>::Value;
 
     fn distribution(&self, x: f64) -> f64 {
-        self.gamma.distribution(x)
+        self.0.distribution(x)
     }
 }
 
 impl distribution::Entropy for Erlang {
     fn entropy(&self) -> f64 {
-        self.gamma.entropy()
+        self.0.entropy()
     }
 }
 
 impl distribution::Kurtosis for Erlang {
     #[inline]
     fn kurtosis(&self) -> f64 {
-        self.gamma.kurtosis()
+        self.0.kurtosis()
     }
 }
 
 impl distribution::Mean for Erlang {
     #[inline]
     fn mean(&self) -> f64 {
-        self.gamma.mean()
+        self.0.mean()
     }
 }
 
 impl distribution::Modes for Erlang {
     fn modes(&self) -> Vec<f64> {
-        self.gamma.modes()
+        self.0.modes()
     }
 }
 
 impl distribution::Sample for Erlang {
     #[inline]
     fn sample<S>(&self, source: &mut S) -> f64 where S: Source {
-        self.gamma.sample(source)
+        self.0.sample(source)
     }
 }
 
 impl distribution::Skewness for Erlang {
     #[inline]
     fn skewness(&self) -> f64 {
-        self.gamma.skewness()
+        self.0.skewness()
     }
 }
 
 impl distribution::Variance for Erlang {
     #[inline]
     fn variance(&self) -> f64 {
-        self.gamma.variance()
+        self.0.variance()
     }
 }
 
