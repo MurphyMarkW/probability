@@ -2,12 +2,10 @@ use distribution;
 use source::Source;
 
 /// A chisquared distribution.
+// We use the fact that the Chisquared distribution is a special form of the
+// gamma distribution.
 #[derive(Clone, Copy)]
-pub struct Chisquared {
-    // We use the fact that the Chisquared distribution is a special form of the
-    // gamma distribution.
-    gamma: distribution::Gamma,
-}
+pub struct Chisquared(distribution::Gamma);
 
 impl Chisquared {
     /// Create a chisquared distribution with degrees of freedom `k`.
@@ -16,17 +14,17 @@ impl Chisquared {
     #[inline]
     pub fn new(k: u64) -> Self {
         should!(k > 0);
-        Chisquared { gamma: distribution::Gamma::new((k as f64) / 2.0, 2.0) }
+        Chisquared(distribution::Gamma::new((k as f64) / 2.0, 2.0))
     }
 
     /// Return the degrees of freedom parameter 'k'.
     #[inline(always)]
-    pub fn k(&self) -> u64 { (self.gamma.k() as u64) * 2 }
+    pub fn k(&self) -> u64 { (self.0.k() as u64) * 2 }
 }
 
 impl distribution::Continuous for Chisquared {
     fn density(&self, x: f64) -> f64 {
-        self.gamma.density(x)
+        self.0.density(x)
     }
 }
 
@@ -34,27 +32,27 @@ impl distribution::Distribution for Chisquared {
     type Value = <distribution::Gamma as distribution::Distribution>::Value;
 
     fn distribution(&self, x: f64) -> f64 {
-        self.gamma.distribution(x)
+        self.0.distribution(x)
     }
 }
 
 impl distribution::Entropy for Chisquared {
     fn entropy(&self) -> f64 {
-        self.gamma.entropy()
+        self.0.entropy()
     }
 }
 
 impl distribution::Kurtosis for Chisquared {
     #[inline]
     fn kurtosis(&self) -> f64 {
-        self.gamma.kurtosis()
+        self.0.kurtosis()
     }
 }
 
 impl distribution::Mean for Chisquared {
     #[inline]
     fn mean(&self) -> f64 {
-        self.gamma.mean()
+        self.0.mean()
     }
 }
 
@@ -67,28 +65,28 @@ impl distribution::Median for Chisquared {
 
 impl distribution::Modes for Chisquared {
     fn modes(&self) -> Vec<f64> {
-        self.gamma.modes()
+        self.0.modes()
     }
 }
 
 impl distribution::Sample for Chisquared {
     #[inline]
     fn sample<S>(&self, source: &mut S) -> f64 where S: Source {
-        self.gamma.sample(source)
+        self.0.sample(source)
     }
 }
 
 impl distribution::Skewness for Chisquared {
     #[inline]
     fn skewness(&self) -> f64 {
-        self.gamma.skewness()
+        self.0.skewness()
     }
 }
 
 impl distribution::Variance for Chisquared {
     #[inline]
     fn variance(&self) -> f64 {
-        self.gamma.variance()
+        self.0.variance()
     }
 }
 
