@@ -17,7 +17,7 @@ impl Chisquared {
         Chisquared(distribution::Gamma::new((k as f64) / 2.0, 2.0))
     }
 
-    /// Return the degrees of freedom parameter 'k'.
+    /// Return the degrees of freedom parameter `k`.
     #[inline(always)]
     pub fn k(&self) -> u64 { (self.0.k() as u64) * 2 }
 }
